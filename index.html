@@ -1,0 +1,745 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bencon Academy</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --blue:      #1B3EAA;
+    --blue-dark: #0E2470;
+    --red:       #CC1111;
+    --red-dark:  #a00e0e;
+    --light-blue:#EEF2FB;
+    --light-red: #FDF0F0;
+    --gray:      #5C6370;
+    --border:    #E2E6EF;
+    --bg:        #F5F7FA;
+    --white:     #ffffff;
+    --text:      #1A1E2E;
+  }
+
+  *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+  html { font-size:16px; }
+  body {
+    font-family:'Inter', sans-serif;
+    background:var(--bg); color:var(--text);
+    min-height:100vh; overflow-x:hidden;
+  }
+
+  /* ─── HEADER ─── */
+  header {
+    background:var(--blue-dark);
+    padding:1.1rem 2rem;
+    display:flex; align-items:center; gap:1rem;
+    border-bottom:3px solid var(--red);
+    position:sticky; top:0; z-index:100;
+  }
+  header img {
+    width:46px; height:46px; border-radius:50%;
+    object-fit:cover; border:2px solid rgba(255,255,255,0.2);
+    flex-shrink:0;
+  }
+  .header-text .school-name {
+    font-family:'Playfair Display', serif;
+    font-size:1.15rem; font-weight:700; color:#fff; line-height:1.15;
+  }
+  .header-text .school-motto {
+    font-size:0.62rem; color:rgba(255,255,255,0.45);
+    letter-spacing:1px; text-transform:uppercase;
+  }
+
+  /* ─── HOME SCREEN ─── */
+  #home {
+    display:flex; flex-direction:column; align-items:center;
+    padding:3rem 1.5rem 4rem;
+    min-height:calc(100vh - 78px);
+  }
+
+  .home-hero {
+    text-align:center; max-width:520px; margin-bottom:3rem;
+  }
+  .home-logo {
+    width:120px; height:120px; border-radius:50%;
+    overflow:hidden; margin:0 auto 1.5rem;
+    border:4px solid var(--white);
+    box-shadow:0 8px 32px rgba(27,62,170,0.2);
+  }
+  .home-logo img { width:100%; height:100%; object-fit:cover; }
+  .home-hero h1 {
+    font-family:'Playfair Display', serif;
+    font-size:2rem; font-weight:700; color:var(--blue-dark);
+    line-height:1.25; margin-bottom:0.75rem;
+  }
+  .home-hero h1 span { color:var(--red); }
+  .home-hero p {
+    font-size:0.97rem; color:var(--gray); line-height:1.75;
+  }
+
+  /* stats row */
+  .stats-row {
+    display:flex; gap:0; margin-bottom:3rem;
+    background:var(--white); border-radius:14px;
+    border:1px solid var(--border);
+    overflow:hidden;
+    box-shadow:0 2px 12px rgba(0,0,0,0.06);
+    width:100%; max-width:500px;
+  }
+  .stat-cell {
+    flex:1; padding:1.1rem 0.5rem; text-align:center;
+    border-right:1px solid var(--border);
+  }
+  .stat-cell:last-child { border-right:none; }
+  .stat-cell .n {
+    font-family:'Playfair Display', serif;
+    font-size:1.5rem; font-weight:700; color:var(--blue); line-height:1;
+  }
+  .stat-cell .l {
+    font-size:0.65rem; font-weight:600; text-transform:uppercase;
+    letter-spacing:0.8px; color:var(--gray); margin-top:0.25rem;
+  }
+
+  /* ─── MAIN MENU BUTTONS ─── */
+  .menu-grid {
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:1rem;
+    width:100%; max-width:500px;
+  }
+  .menu-btn {
+    background:var(--white);
+    border:2px solid var(--border);
+    border-radius:16px;
+    padding:1.75rem 1.25rem;
+    cursor:pointer;
+    text-align:center;
+    transition:all 0.22s;
+    display:flex; flex-direction:column; align-items:center; gap:0.7rem;
+    box-shadow:0 2px 10px rgba(0,0,0,0.04);
+    text-decoration:none; color:inherit;
+  }
+  .menu-btn:hover {
+    transform:translateY(-4px);
+    box-shadow:0 8px 24px rgba(27,62,170,0.14);
+    border-color:var(--blue);
+  }
+  .menu-btn.red:hover { border-color:var(--red); box-shadow:0 8px 24px rgba(204,17,17,0.14); }
+  .menu-btn-icon {
+    width:54px; height:54px; border-radius:14px;
+    display:flex; align-items:center; justify-content:center;
+    font-size:1.5rem;
+  }
+  .menu-btn-label {
+    font-size:0.9rem; font-weight:700; color:var(--text); line-height:1.2;
+  }
+  .menu-btn-sub {
+    font-size:0.73rem; color:var(--gray); line-height:1.4;
+  }
+  .menu-btn.full { grid-column:1/-1; flex-direction:row; text-align:left; padding:1.25rem 1.5rem; gap:1.1rem; }
+  .menu-btn.full .menu-btn-icon { flex-shrink:0; }
+  .menu-btn.full .menu-btn-text { display:flex; flex-direction:column; gap:0.15rem; }
+
+  /* ─── PANEL OVERLAY ─── */
+  .panel {
+    display:none;
+    position:fixed; inset:0; z-index:200;
+    background:rgba(14,36,112,0.5);
+    backdrop-filter:blur(4px);
+    align-items:flex-end; justify-content:center;
+    padding:1rem;
+    animation:fadeOverlay 0.25s ease both;
+  }
+  .panel.active { display:flex; }
+
+  @keyframes fadeOverlay { from{opacity:0} to{opacity:1} }
+
+  .panel-card {
+    background:var(--white);
+    border-radius:20px 20px 16px 16px;
+    width:100%; max-width:600px;
+    max-height:88vh;
+    overflow:hidden;
+    display:flex; flex-direction:column;
+    animation:slideUp 0.3s ease both;
+    box-shadow:0 -4px 40px rgba(0,0,0,0.18);
+  }
+  @keyframes slideUp { from{transform:translateY(40px);opacity:0} to{transform:translateY(0);opacity:1} }
+
+  .panel-header {
+    display:flex; align-items:center; justify-content:space-between;
+    padding:1.25rem 1.5rem;
+    border-bottom:1px solid var(--border);
+    flex-shrink:0;
+  }
+  .panel-header-left { display:flex; align-items:center; gap:0.85rem; }
+  .panel-header-icon {
+    width:40px; height:40px; border-radius:10px;
+    display:flex; align-items:center; justify-content:center; font-size:1.2rem;
+    flex-shrink:0;
+  }
+  .panel-title { font-family:'Playfair Display', serif; font-size:1.15rem; font-weight:700; color:var(--text); line-height:1.2; }
+  .panel-close {
+    width:36px; height:36px; border-radius:50%;
+    border:1px solid var(--border);
+    background:var(--bg); color:var(--gray);
+    font-size:1.1rem; cursor:pointer;
+    display:flex; align-items:center; justify-content:center;
+    transition:all 0.15s; flex-shrink:0;
+  }
+  .panel-close:hover { background:var(--light-red); color:var(--red); border-color:var(--red); }
+
+  .panel-body {
+    overflow-y:auto; padding:1.5rem;
+    flex:1;
+  }
+  .panel-body::-webkit-scrollbar { width:4px; }
+  .panel-body::-webkit-scrollbar-thumb { background:#d0d6e8; border-radius:4px; }
+
+  /* ─── ABOUT PANEL ─── */
+  .about-quote {
+    background:var(--blue-dark); border-radius:12px; padding:1.5rem;
+    margin-bottom:1.5rem;
+  }
+  .about-quote p {
+    font-family:'Playfair Display', serif;
+    font-size:1.05rem; font-weight:600; color:#fff; line-height:1.6;
+  }
+  .about-quote p span { color:#92aaff; }
+  .about-quote .motto {
+    font-family:'Inter', sans-serif;
+    font-size:0.65rem; font-weight:700; text-transform:uppercase;
+    letter-spacing:2px; color:rgba(255,255,255,0.35); margin-top:0.9rem;
+  }
+  .about-body-text p { font-size:0.95rem; color:#4a5060; line-height:1.85; margin-bottom:0.85rem; }
+  .about-body-text p strong { color:var(--text); }
+
+  .levels-section { margin-top:1.25rem; }
+  .levels-section h4 { font-size:0.72rem; font-weight:700; text-transform:uppercase; letter-spacing:1.5px; color:var(--gray); margin-bottom:0.65rem; }
+  .level-chips { display:flex; flex-wrap:wrap; gap:0.4rem; }
+  .chip {
+    font-size:0.79rem; font-weight:500; color:var(--blue);
+    background:var(--light-blue); border:1px solid #ccd6f4;
+    padding:0.28rem 0.8rem; border-radius:20px;
+  }
+
+  .values-section { margin-top:1.5rem; display:flex; flex-direction:column; gap:0.75rem; }
+  .val-card {
+    display:flex; align-items:flex-start; gap:0.85rem;
+    padding:1rem 1.1rem; background:var(--bg);
+    border-radius:10px; border-left:3px solid var(--blue);
+  }
+  .val-icon { font-size:1.2rem; flex-shrink:0; margin-top:2px; }
+  .val-card h4 { font-size:0.88rem; font-weight:700; color:var(--text); margin-bottom:0.2rem; }
+  .val-card p  { font-size:0.81rem; color:var(--gray); line-height:1.6; }
+
+  /* ─── EVENTS PANEL ─── */
+  .event-item {
+    display:flex; gap:1rem; padding:1.1rem 0;
+    border-bottom:1px solid var(--border);
+  }
+  .event-item:last-child { border-bottom:none; }
+  .event-date-box {
+    width:52px; flex-shrink:0; text-align:center;
+    background:var(--light-blue); border-radius:10px;
+    padding:0.5rem 0.25rem;
+  }
+  .event-date-box .day { font-family:'Playfair Display', serif; font-size:1.5rem; font-weight:700; color:var(--blue); line-height:1; }
+  .event-date-box .month { font-size:0.62rem; font-weight:700; text-transform:uppercase; letter-spacing:0.5px; color:var(--gray); margin-top:0.2rem; }
+  .event-info .ev-title { font-size:0.95rem; font-weight:700; color:var(--text); margin-bottom:0.3rem; }
+  .event-info .ev-desc  { font-size:0.82rem; color:var(--gray); line-height:1.65; }
+  .ev-tag-small {
+    display:inline-block; margin-top:0.4rem;
+    font-size:0.65rem; font-weight:700; text-transform:uppercase; letter-spacing:0.7px;
+    padding:0.17rem 0.6rem; border-radius:20px;
+  }
+  .event-item.red-accent .event-date-box { background:var(--light-red); }
+  .event-item.red-accent .event-date-box .day { color:var(--red); }
+
+  /* calendar in panel */
+  .cal-section { margin-top:1.5rem; }
+  .cal-section h4 { font-size:0.72rem; font-weight:700; text-transform:uppercase; letter-spacing:1.5px; color:var(--gray); margin-bottom:1rem; }
+  .cal-head { display:flex; align-items:center; justify-content:space-between; margin-bottom:1rem; }
+  .cal-month-lbl { font-family:'Playfair Display', serif; font-size:1rem; font-weight:600; color:var(--text); }
+  .cal-controls { display:flex; gap:0.35rem; }
+  .cal-btn {
+    width:30px; height:30px; border-radius:6px;
+    background:var(--bg); border:1px solid var(--border);
+    color:var(--text); font-size:0.9rem; cursor:pointer;
+    display:flex; align-items:center; justify-content:center;
+    transition:all 0.15s;
+  }
+  .cal-btn:hover { background:var(--blue); color:#fff; border-color:var(--blue); }
+  .cal-grid { display:grid; grid-template-columns:repeat(7,1fr); gap:3px; }
+  .cal-dn { text-align:center; font-size:0.62rem; font-weight:700; text-transform:uppercase; letter-spacing:0.5px; color:#bbb; padding:0.4rem 0; }
+  .cal-d  { aspect-ratio:1; border-radius:5px; display:flex; align-items:center; justify-content:center; font-size:0.78rem; font-weight:500; cursor:default; transition:background 0.12s; }
+  .cal-d:hover:not(.empty) { background:var(--light-blue); }
+  .cal-d.empty  { opacity:0; pointer-events:none; }
+  .cal-d.today  { background:var(--blue); color:#fff; font-weight:700; }
+  .cal-d.event  { background:var(--light-red); color:var(--red); font-weight:700; }
+  .cal-legend { display:flex; gap:1.25rem; margin-top:0.75rem; font-size:0.72rem; color:var(--gray); }
+  .cal-legend span { display:flex; align-items:center; gap:0.35rem; }
+  .leg-dot { width:9px; height:9px; border-radius:3px; }
+
+  /* ─── CONTACT PANEL ─── */
+  .contact-info-list { display:flex; flex-direction:column; gap:0; margin-bottom:1.75rem; }
+  .ci-row {
+    display:flex; align-items:center; gap:1rem;
+    padding:1rem 0; border-bottom:1px solid var(--border);
+  }
+  .ci-row:first-child { padding-top:0; }
+  .ci-row:last-child  { border-bottom:none; }
+  .ci-icon {
+    width:40px; height:40px; border-radius:10px;
+    display:flex; align-items:center; justify-content:center;
+    font-size:1.05rem; flex-shrink:0;
+    background:var(--light-blue);
+  }
+  .ci-label { font-size:0.68rem; font-weight:700; text-transform:uppercase; letter-spacing:1px; color:var(--gray); margin-bottom:0.18rem; }
+  .ci-value { font-size:0.9rem; color:var(--text); font-weight:500; line-height:1.45; }
+
+  /* form */
+  .form-section h4 { font-size:0.72rem; font-weight:700; text-transform:uppercase; letter-spacing:1.5px; color:var(--gray); margin-bottom:1.1rem; }
+  .form-grid { display:flex; flex-direction:column; gap:0.85rem; }
+  .field label { display:block; font-size:0.7rem; font-weight:700; text-transform:uppercase; letter-spacing:1.2px; color:var(--gray); margin-bottom:0.35rem; }
+  .field input, .field textarea, .field select {
+    width:100%; background:var(--bg); border:1.5px solid var(--border);
+    border-radius:8px; padding:0.72rem 0.95rem;
+    color:var(--text); font-family:'Inter', sans-serif;
+    font-size:0.9rem; outline:none; transition:all 0.18s;
+    appearance:none;
+  }
+  .field input::placeholder, .field textarea::placeholder { color:#b0b7c4; }
+  .field input:focus, .field textarea:focus, .field select:focus { border-color:var(--blue); background:#fff; }
+  .field textarea { resize:vertical; min-height:90px; }
+  .field select option { background:#fff; color:var(--text); }
+  .field-row { display:grid; grid-template-columns:1fr 1fr; gap:0.85rem; }
+
+  /* ─── ENROL PANEL ─── */
+  .enrol-intro { font-size:0.95rem; color:var(--gray); line-height:1.8; margin-bottom:1.5rem; }
+  .enrol-steps { display:flex; flex-direction:column; gap:1rem; margin-bottom:1.75rem; }
+  .step-item { display:flex; gap:1rem; align-items:flex-start; }
+  .step-num {
+    width:32px; height:32px; border-radius:50%;
+    background:var(--blue); color:#fff;
+    font-size:0.82rem; font-weight:700;
+    display:flex; align-items:center; justify-content:center; flex-shrink:0;
+  }
+  .step-text h4 { font-size:0.9rem; font-weight:700; color:var(--text); margin-bottom:0.2rem; }
+  .step-text p  { font-size:0.82rem; color:var(--gray); line-height:1.6; }
+  .enrol-note {
+    background:var(--light-blue); border-radius:10px; padding:1rem 1.2rem;
+    font-size:0.84rem; color:var(--blue-dark); line-height:1.65;
+    border-left:3px solid var(--blue); margin-bottom:1.5rem;
+  }
+
+  /* ─── SHARED BUTTON ─── */
+  .action-btn {
+    width:100%; padding:0.9rem; border-radius:10px;
+    font-family:'Inter', sans-serif; font-size:0.95rem; font-weight:700;
+    border:none; cursor:pointer; transition:all 0.2s;
+    display:flex; align-items:center; justify-content:center; gap:0.5rem;
+  }
+  .action-btn.blue  { background:var(--blue);  color:#fff; }
+  .action-btn.blue:hover  { background:var(--blue-dark); transform:translateY(-2px); }
+  .action-btn.red   { background:var(--red);   color:#fff; }
+  .action-btn.red:hover   { background:var(--red-dark);  transform:translateY(-2px); }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header>
+  <img src="/mnt/user-data/uploads/IMG-20260305-WA0000.jpg" alt="Bencon Academy Logo">
+  <div class="header-text">
+    <div class="school-name">Bencon Academy</div>
+    <div class="school-motto">Excellence Is Our Hallmark · Ghana</div>
+  </div>
+</header>
+
+<!-- HOME SCREEN -->
+<div id="home">
+
+  <!-- Hero -->
+  <div class="home-hero">
+    <div class="home-logo">
+      <img src="/mnt/user-data/uploads/IMG-20260305-WA0000.jpg" alt="Bencon Academy Crest">
+    </div>
+    <h1>Welcome to<br><span>Bencon Academy</span></h1>
+    <p>Quality education from Preschool through Basic 6,<br>rooted in excellence, character, and care.</p>
+  </div>
+
+  <!-- Stats -->
+  <div class="stats-row">
+    <div class="stat-cell"><div class="n">500+</div><div class="l">Pupils</div></div>
+    <div class="stat-cell"><div class="n">40+</div><div class="l">Staff</div></div>
+    <div class="stat-cell"><div class="n">8</div><div class="l">Levels</div></div>
+    <div class="stat-cell"><div class="n">15yrs</div><div class="l">Est.</div></div>
+  </div>
+
+  <!-- Menu Buttons -->
+  <div class="menu-grid">
+
+    <button class="menu-btn" onclick="openPanel('about')">
+      <div class="menu-btn-icon" style="background:#EEF2FB;">🏫</div>
+      <div class="menu-btn-label">About Us</div>
+      <div class="menu-btn-sub">Our mission & values</div>
+    </button>
+
+    <button class="menu-btn" onclick="openPanel('events')">
+      <div class="menu-btn-icon" style="background:#FDF0F0;">📅</div>
+      <div class="menu-btn-label">Events</div>
+      <div class="menu-btn-sub">Calendar & activities</div>
+    </button>
+
+    <button class="menu-btn" onclick="openPanel('contact')">
+      <div class="menu-btn-icon" style="background:#EEF2FB;">📞</div>
+      <div class="menu-btn-label">Contact Us</div>
+      <div class="menu-btn-sub">Send us a message</div>
+    </button>
+
+    <button class="menu-btn red" onclick="openPanel('enrol')">
+      <div class="menu-btn-icon" style="background:#FDF0F0;">🎓</div>
+      <div class="menu-btn-label">Enrol Now</div>
+      <div class="menu-btn-sub">Apply for admission</div>
+    </button>
+
+  </div>
+</div>
+
+
+<!-- ════ PANEL: ABOUT ════ -->
+<div class="panel" id="panel-about" onclick="handleOverlayClick(event, 'about')">
+  <div class="panel-card">
+    <div class="panel-header">
+      <div class="panel-header-left">
+        <div class="panel-header-icon" style="background:#EEF2FB;">🏫</div>
+        <div class="panel-title">About Bencon Academy</div>
+      </div>
+      <button class="panel-close" onclick="closePanel('about')">✕</button>
+    </div>
+    <div class="panel-body">
+
+      <div class="about-quote">
+        <p>"We are committed to nurturing <span>well-rounded individuals</span> who are prepared to lead and contribute to Ghana and beyond."</p>
+        <div class="motto">Excellence Is Our Hallmark</div>
+      </div>
+
+      <div class="about-body-text">
+        <p>Bencon Academy is a respected Ghanaian school offering quality education from Preschool through Basic 6. We believe every child deserves a disciplined, supportive environment in which to learn and thrive.</p>
+        <p>Our motto, <strong>"Excellence Is Our Hallmark,"</strong> reflects the standard we hold ourselves and our pupils to — in the classroom, on the field, and in daily conduct.</p>
+      </div>
+
+      <div class="levels-section">
+        <h4>Levels Offered</h4>
+        <div class="level-chips">
+          <span class="chip">Preschool</span>
+          <span class="chip">KG 1</span>
+          <span class="chip">KG 2</span>
+          <span class="chip">Basic 1</span>
+          <span class="chip">Basic 2</span>
+          <span class="chip">Basic 3</span>
+          <span class="chip">Basic 4</span>
+          <span class="chip">Basic 5</span>
+          <span class="chip">Basic 6</span>
+        </div>
+      </div>
+
+      <div class="values-section">
+        <div class="val-card">
+          <div class="val-icon">📘</div>
+          <div>
+            <h4>Academic Excellence</h4>
+            <p>GES-aligned instruction that prepares pupils for the next stage of their education.</p>
+          </div>
+        </div>
+        <div class="val-card">
+          <div class="val-icon">🌱</div>
+          <div>
+            <h4>Character Development</h4>
+            <p>Instilling discipline, respect, and responsibility alongside academic achievement.</p>
+          </div>
+        </div>
+        <div class="val-card">
+          <div class="val-icon">🤝</div>
+          <div>
+            <h4>Safe & Inclusive Community</h4>
+            <p>Every child feels valued, safe, and supported to grow.</p>
+          </div>
+        </div>
+      </div>
+
+      <div style="margin-top:1.5rem;">
+        <button class="action-btn blue" onclick="closePanel('about'); openPanel('enrol')">Apply for Admission →</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ════ PANEL: EVENTS ════ -->
+<div class="panel" id="panel-events" onclick="handleOverlayClick(event, 'events')">
+  <div class="panel-card">
+    <div class="panel-header">
+      <div class="panel-header-left">
+        <div class="panel-header-icon" style="background:#FDF0F0;">📅</div>
+        <div class="panel-title">Events & Calendar</div>
+      </div>
+      <button class="panel-close" onclick="closePanel('events')">✕</button>
+    </div>
+    <div class="panel-body">
+
+      <div class="event-item">
+        <div class="event-date-box"><div class="day">18</div><div class="month">Mar</div></div>
+        <div class="event-info">
+          <div class="ev-title">End-of-Term Concert</div>
+          <div class="ev-desc">Pupils from all year groups present performances in music, dance, and drama. Parents and guardians are welcome.</div>
+          <span class="ev-tag-small" style="background:#EEF2FB;color:var(--blue);">All School</span>
+        </div>
+      </div>
+
+      <div class="event-item red-accent">
+        <div class="event-date-box"><div class="day">25</div><div class="month">Mar</div></div>
+        <div class="event-info">
+          <div class="ev-title">Annual Sports Day</div>
+          <div class="ev-desc">Inter-house athletic competition with track and field events, team sports, and relay races for all year groups.</div>
+          <span class="ev-tag-small" style="background:var(--light-red);color:var(--red);">Athletics</span>
+        </div>
+      </div>
+
+      <div class="event-item">
+        <div class="event-date-box"><div class="day">04</div><div class="month">Apr</div></div>
+        <div class="event-info">
+          <div class="ev-title">Parent–Teacher Meeting</div>
+          <div class="ev-desc">Parents and class teachers review academic progress and discuss goals for the coming term.</div>
+          <span class="ev-tag-small" style="background:#EEF2FB;color:var(--blue);">Parents</span>
+        </div>
+      </div>
+
+      <div class="event-item">
+        <div class="event-date-box"><div class="day">10</div><div class="month">Apr</div></div>
+        <div class="event-info">
+          <div class="ev-title">Science Exhibition</div>
+          <div class="ev-desc">Basic 4–6 pupils showcase science projects and experiments to the school community and invited guests.</div>
+          <span class="ev-tag-small" style="background:#EEF2FB;color:var(--blue);">Upper Primary</span>
+        </div>
+      </div>
+
+      <div class="event-item red-accent">
+        <div class="event-date-box"><div class="day">22</div><div class="month">Apr</div></div>
+        <div class="event-info">
+          <div class="ev-title">Preschool Graduation</div>
+          <div class="ev-desc">A formal ceremony celebrating the transition of our youngest learners from Preschool to KG 1.</div>
+          <span class="ev-tag-small" style="background:var(--light-red);color:var(--red);">Preschool</span>
+        </div>
+      </div>
+
+      <div class="event-item">
+        <div class="event-date-box"><div class="day">30</div><div class="month">Apr</div></div>
+        <div class="event-info">
+          <div class="ev-title">Ghana Cultural Day</div>
+          <div class="ev-desc">Celebrating Ghana's cultural heritage through traditional attire, food, music, and storytelling.</div>
+          <span class="ev-tag-small" style="background:#EEF2FB;color:var(--blue);">Cultural</span>
+        </div>
+      </div>
+
+      <!-- mini calendar -->
+      <div class="cal-section">
+        <h4>Monthly Calendar</h4>
+        <div class="cal-head">
+          <div class="cal-month-lbl" id="calTitle"></div>
+          <div class="cal-controls">
+            <button class="cal-btn" onclick="prevMonth()">&#8249;</button>
+            <button class="cal-btn" onclick="nextMonth()">&#8250;</button>
+          </div>
+        </div>
+        <div class="cal-grid" id="calGrid"></div>
+        <div class="cal-legend">
+          <span><div class="leg-dot" style="background:var(--blue);"></div> Today</span>
+          <span><div class="leg-dot" style="background:var(--light-red);border:1px solid var(--red);"></div> Event</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+
+<!-- ════ PANEL: CONTACT ════ -->
+<div class="panel" id="panel-contact" onclick="handleOverlayClick(event, 'contact')">
+  <div class="panel-card">
+    <div class="panel-header">
+      <div class="panel-header-left">
+        <div class="panel-header-icon" style="background:#EEF2FB;">📞</div>
+        <div class="panel-title">Contact Us</div>
+      </div>
+      <button class="panel-close" onclick="closePanel('contact')">✕</button>
+    </div>
+    <div class="panel-body">
+
+      <div class="contact-info-list">
+        <div class="ci-row">
+          <div class="ci-icon">📍</div>
+          <div><div class="ci-label">Address</div><div class="ci-value">Bencon Academy, Ghana</div></div>
+        </div>
+        <div class="ci-row">
+          <div class="ci-icon">📞</div>
+          <div><div class="ci-label">Phone</div><div class="ci-value">+233 000 000 000</div></div>
+        </div>
+        <div class="ci-row">
+          <div class="ci-icon">✉️</div>
+          <div><div class="ci-label">Email</div><div class="ci-value">info@benconacademy.edu.gh</div></div>
+        </div>
+        <div class="ci-row">
+          <div class="ci-icon">🕐</div>
+          <div><div class="ci-label">School Hours</div><div class="ci-value">Monday – Friday, 7:00 AM – 3:30 PM</div></div>
+        </div>
+      </div>
+
+      <div class="form-section">
+        <h4>Send a Message</h4>
+        <div class="form-grid">
+          <div class="field-row">
+            <div class="field"><label>Full Name</label><input type="text" placeholder="Your name"></div>
+            <div class="field"><label>Phone</label><input type="tel" placeholder="+233 …"></div>
+          </div>
+          <div class="field"><label>Email</label><input type="email" placeholder="you@example.com"></div>
+          <div class="field">
+            <label>Subject</label>
+            <select>
+              <option value="">Select…</option>
+              <option>Admissions &amp; Enrolment</option>
+              <option>School Fees</option>
+              <option>Academic Enquiry</option>
+              <option>Events</option>
+              <option>General Information</option>
+            </select>
+          </div>
+          <div class="field"><label>Message</label><textarea placeholder="How can we help you?"></textarea></div>
+          <button class="action-btn blue" onclick="submitForm(this)">Send Message</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ════ PANEL: ENROL ════ -->
+<div class="panel" id="panel-enrol" onclick="handleOverlayClick(event, 'enrol')">
+  <div class="panel-card">
+    <div class="panel-header">
+      <div class="panel-header-left">
+        <div class="panel-header-icon" style="background:#FDF0F0;">🎓</div>
+        <div class="panel-title">Enrol at Bencon Academy</div>
+      </div>
+      <button class="panel-close" onclick="closePanel('enrol')">✕</button>
+    </div>
+    <div class="panel-body">
+
+      <p class="enrol-intro">We welcome applications for all levels from Preschool through Basic 6. Follow the steps below to begin the enrolment process.</p>
+
+      <div class="enrol-steps">
+        <div class="step-item">
+          <div class="step-num">1</div>
+          <div class="step-text">
+            <h4>Contact the School</h4>
+            <p>Call or visit us to confirm available spaces for your child's year group.</p>
+          </div>
+        </div>
+        <div class="step-item">
+          <div class="step-num">2</div>
+          <div class="step-text">
+            <h4>Collect an Application Form</h4>
+            <p>Pick up an admission form from the school office or request one via email.</p>
+          </div>
+        </div>
+        <div class="step-item">
+          <div class="step-num">3</div>
+          <div class="step-text">
+            <h4>Submit Required Documents</h4>
+            <p>Birth certificate, passport photo, last school report (if applicable), and completed form.</p>
+          </div>
+        </div>
+        <div class="step-item">
+          <div class="step-num">4</div>
+          <div class="step-text">
+            <h4>Attend an Assessment</h4>
+            <p>Pupils from Basic 1 and above may be required to complete a brief placement assessment.</p>
+          </div>
+        </div>
+        <div class="step-item">
+          <div class="step-num">5</div>
+          <div class="step-text">
+            <h4>Receive Confirmation</h4>
+            <p>Once reviewed, you will be notified of acceptance and given details on school fees and start date.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="enrol-note">
+        📌 <strong>Admissions are currently open</strong> for the 2025/2026 academic year. We encourage early application as spaces are limited.
+      </div>
+
+      <button class="action-btn red" onclick="closePanel('enrol'); openPanel('contact')">Contact Us to Apply →</button>
+
+    </div>
+  </div>
+</div>
+
+
+<script>
+  /* ── Open / Close Panels ── */
+  function openPanel(name) {
+    document.getElementById('panel-' + name).classList.add('active');
+    document.body.style.overflow = 'hidden';
+    if (name === 'events') renderCal();
+  }
+  function closePanel(name) {
+    document.getElementById('panel-' + name).classList.remove('active');
+    document.body.style.overflow = '';
+  }
+  function handleOverlayClick(e, name) {
+    if (e.target === document.getElementById('panel-' + name)) closePanel(name);
+  }
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') {
+      ['about','events','contact','enrol'].forEach(closePanel);
+      document.body.style.overflow = '';
+    }
+  });
+
+  /* ── Calendar ── */
+  const evDays = { '2026-3':[18,25], '2026-4':[4,10,22,30] };
+  let cur = new Date(2026, 2, 1);
+  function renderCal() {
+    const y = cur.getFullYear(), m = cur.getMonth();
+    const key = `${y}-${m+1}`, today = new Date();
+    const firstDay = new Date(y,m,1).getDay();
+    const daysInMonth = new Date(y,m+1,0).getDate();
+    const dn = ['Su','Mo','Tu','We','Th','Fr','Sa'];
+    const mn = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+    document.getElementById('calTitle').textContent = `${mn[m]} ${y}`;
+    const g = document.getElementById('calGrid');
+    g.innerHTML = '';
+    dn.forEach(n => { const d = document.createElement('div'); d.className='cal-dn'; d.textContent=n; g.appendChild(d); });
+    for (let i=0; i<firstDay; i++) { const d=document.createElement('div'); d.className='cal-d empty'; g.appendChild(d); }
+    for (let i=1; i<=daysInMonth; i++) {
+      const d = document.createElement('div'); d.className='cal-d'; d.textContent=i;
+      if (y===today.getFullYear()&&m===today.getMonth()&&i===today.getDate()) d.classList.add('today');
+      else if ((evDays[key]||[]).includes(i)) d.classList.add('event');
+      g.appendChild(d);
+    }
+  }
+  function prevMonth() { cur.setMonth(cur.getMonth()-1); renderCal(); }
+  function nextMonth() { cur.setMonth(cur.getMonth()+1); renderCal(); }
+
+  /* ── Form Submit ── */
+  function submitForm(btn) {
+    btn.textContent = '✓ Message Sent!';
+    btn.style.background = '#1B3EAA';
+    btn.disabled = true;
+    setTimeout(() => { btn.textContent = 'Send Message'; btn.style.background = ''; btn.disabled = false; }, 3500);
+  }
+</script>
+</body>
+</html>
